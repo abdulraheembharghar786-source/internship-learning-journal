@@ -22,8 +22,8 @@ Course Link: https://tds.s-anand.net/#/
 
 | Module | Topics | Status |
 |--------|--------|--------|
-| Module 01 | Foundations | In Progress |
-| Module 02 | Tools & Implementation | Not Started |
+| Module 01 | Foundations | Completed |
+| Module 02 | Tools & Implementation | started |
 | Module 03 | Project Work | Not Started |
 
 ---
