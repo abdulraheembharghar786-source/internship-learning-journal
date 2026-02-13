@@ -75,7 +75,6 @@ Free accounts available; similar to GitHub but focused on ML.
 You can save these notes in a repo as SESSION3_NOTES.md:
 
 markdown
-# Week 2 - Session 3 (TDS Sep 2025)
 
 ## GitHub Connectivity
 - CLI & Desktop connections
