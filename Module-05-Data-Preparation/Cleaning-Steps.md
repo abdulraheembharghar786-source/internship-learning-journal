@@ -1,0 +1,990 @@
+# Clean up data in Excel
+
+## Dataset Used
+- Source: Wikipedia (City-wise population dataset)
+- Columns included: City Name, Country, Population Estimates, City Definition (Municipality/Capital/Autonomous), Area, etc.
+- Mixed data types: Text and Numeric values.
+
+---
+
+## 1. Find and Replace (Ctrl + H)
+
+**Objective:** Remove unwanted text ("more" inside square brackets) from the Country column.
+
+### Steps:
+1. Select the dataset or specific column.
+2. Press `Ctrl + H` to open Find and Replace.
+3. In "Find what", enter the unwanted term (e.g., [more]).
+4. Leave "Replace with" empty.
+5. Click **Replace All**.
+6. Verify number of replacements made.
+
+---
+
+## 2. Change Data Format (General → Number)
+
+**Objective:** Convert numeric columns (E to N) to proper Number data type.
+
+### Steps:
+1. Select columns E to N.
+2. Go to the Home tab.
+3. Change data type from **General** to **Number**.
+4. Adjust decimal places if needed.
+
+---
+
+## 3. Remove Extra Spaces using TRIM()
+
+**Objective:** Clean unnecessary spaces in text fields (e.g., extra spaces around hyphens).
+
+### Steps:
+1. Insert a new column (e.g., "Trim Column").
+2. Use formula:
+   ```
+   =TRIM(D2)
+   ```
+3. Drag the formula down for all rows.
+4. Replace original column if required.
+
+---
+
+## 4. Identify and Delete Blank Rows
+
+**Objective:** Remove rows where important columns contain blank values.
+
+### Steps:
+1. Select the relevant column (e.g., Column D).
+2. Go to **Home → Find & Select → Go To Special**.
+3. Choose **Blanks**.
+4. Right-click on highlighted cells.
+5. Click **Delete → Entire Row**.
+
+---
+
+## 5. Remove Duplicates
+
+**Objective:** Keep only unique country values.
+
+### Steps:
+1. Copy the Country column to a new sheet.
+2. Select the column.
+3. Go to **Data → Remove Duplicates**.
+4. Confirm selection.
+5. Excel shows count of removed duplicates and remaining unique values.
+
+---
+
+# Data Transformation in Excel
+
+## Step 1: Compute Ratios
+- Calculate Metro Area / City Area.
+- Calculate Metro Population / City Population.
+- Use AutoFill to apply formulas across rows.
+- Handle missing values carefully.
+
+---
+
+## Step 2: Create Pivot Table
+- Insert Pivot Table from entire dataset.
+- Create in new worksheet.
+
+---
+
+## Step 3: Detect Duplicates
+- Drag Country to Rows.
+- Add Country again to Values → Count.
+- Identify frequency of records per country.
+
+---
+
+## Step 4: Aggregate Continuous Variables
+- Add City Proper Population to Values → Sum.
+- View total population by country.
+
+---
+
+## Step 5: Identify Outliers
+- Insert Pivot Chart (Bar Chart).
+- Apply country filter.
+- Observe extreme values in:
+  - Population
+  - Density ratios
+
+---
+
+# Convert Text to Columns in Excel
+
+## Dataset Used
+- Source: US Senate voting records (copied from website).
+- Original format: Entire record pasted into a single column.
+- Content included:
+  - Senator Name
+  - Party
+  - State
+  - Vote (Yea/Nay/Not Voting)
+
+---
+
+## Problem
+All values were combined in one column separated by:
+- Left parenthesis "("
+- Hyphen "-"
+- Right parenthesis ")"
+- Comma ","
+
+This made the dataset unstructured and unsuitable for analysis.
+
+---
+
+## Step 1: Split by Left Parenthesis "("
+1. Select the column.
+2. Go to Data → Text to Columns.
+3. Choose "Delimited".
+4. Select "Other" and enter "(".
+5. Click Next → Finish.
+
+Result:
+- Senator name separated from remaining data.
+
+---
+
+## Step 2: Split by Hyphen "-"
+1. Select the new column.
+2. Data → Text to Columns.
+3. Delimited → Other → "-".
+4. Finish.
+
+Result:
+- Party separated into its own column.
+
+---
+
+## Step 3: Split by Right Parenthesis ")"
+1. Select remaining column.
+2. Data → Text to Columns.
+3. Delimited → Other → ")".
+4. Finish.
+
+Result:
+- State extracted into a separate column.
+
+---
+
+## Step 4: Split by Comma ","
+1. Select final column.
+2. Data → Text to Columns.
+3. Delimited → Select "Comma".
+4. Finish.
+
+Result:
+- Vote (Yea/Nay/Not Voting) separated.
+
+---
+
+## Step 5: Final Formatting
+- Delete unnecessary extra columns.
+- Add headers:
+  - Senator
+  - Party
+  - State
+  - Vote
+- Apply formatting for clarity.
+
+---
+
+# Data Aggregation in Excel
+
+## Dataset Used
+- COVID-19 dataset
+- Columns included: Date, Location (Country), New Cases, Total Cases, New Deaths, Total Deaths
+
+---
+
+## Step 1: Remove Unnecessary Columns
+- Deleted columns with excessive missing values.
+- Focused only on:
+  - Date
+  - Location
+  - New Cases
+
+---
+
+## Step 2: Remove Blank Rows
+1. Select "New Cases" column.
+2. Go to Home → Find & Select → Go To Special.
+3. Choose "Blanks".
+4. Right-click → Delete → Entire Row.
+
+Result:
+- Removed rows with missing new case values.
+- Ensured clean dataset for aggregation.
+
+---
+
+## Step 3: Convert Dataset into Excel Table
+1. Select full dataset.
+2. Go to Insert → Table.
+3. Confirm "My table has headers".
+
+Benefits:
+- Automatic filters.
+- Auto-fill formulas.
+- Structured referencing.
+
+---
+
+## Step 4: Create Time-Based Columns
+Added new columns:
+- Week → `=WEEKNUM(Date,1)`
+- Month → `=TEXT(Date,"mmm")`
+- Year → `=TEXT(Date,"yyyy")`
+
+Adjusted format:
+- Changed Week column from Date to Number.
+- Removed decimal places.
+
+Result:
+- Dataset ready for weekly, monthly, yearly aggregation.
+
+---
+
+# Data Preparation in the Shell
+
+## Dataset Used
+- Web server log file from a website.
+- Log file for April 2024 downloaded from a URL.
+- Contains fields such as:
+  - IP Address
+  - Date & Time
+  - Request
+  - HTTP Response Code
+  - Response Size
+  - Referral Source
+  - User Agent
+
+---
+
+## Step 1: Download the Dataset
+Used the `curl` command to download the compressed log file.
+
+Command:
+curl --location --continue-at - --output s.net-April-2024.log.gz <URL>
+
+Purpose:
+- Fetch dataset from the web.
+- Follow redirects.
+- Save the file locally.
+
+---
+
+## Step 2: Verify File Download
+Used `ls` command to check file presence.
+
+Command:
+ls
+ls -l
+
+Purpose:
+- List files in the directory.
+- Verify file size and successful download.
+
+---
+
+## Step 3: Decompress the Log File
+The file was compressed using gzip.
+
+Command:
+gzip --decompress s.net-April-2024.log.gz
+
+Purpose:
+- Convert compressed log file into readable format.
+
+---
+
+## Step 4: Inspect Data
+Used commands to preview file contents.
+
+Commands:
+head -n 5 filename
+tail -n 5 filename
+
+Purpose:
+- View first and last few lines.
+- Understand structure of the log dataset.
+
+---
+
+## Step 5: Count Total Requests
+Used word count command.
+
+Command:
+wc -l filename
+
+Purpose:
+- Count number of lines (requests) in the log file.
+
+---
+
+## Step 6: Extract IP Addresses
+Used `cut` command.
+
+Command:
+cut -d " " -f1 filename
+
+Purpose:
+- Extract first column containing IP addresses.
+
+---
+
+## Step 7: Identify Most Frequent Requests
+Used combination of commands:
+
+cut → sort → uniq → sort
+
+Command pipeline:
+cut -d " " -f1 filename | sort | uniq -c | sort -n
+
+Purpose:
+- Count requests per IP address.
+- Identify high-traffic sources.
+
+---
+
+## Step 8: Search for Specific Patterns
+Used `grep` to find bot traffic.
+
+Command:
+grep "bot" filename
+
+Purpose:
+- Identify automated crawlers and bots accessing the site.
+
+---
+
+## Step 9: Convert Log Format for Analysis
+Used `sed` to modify log format and export as CSV-like file.
+
+Purpose:
+- Replace brackets with quotes.
+- Prepare file for spreadsheet analysis.
+
+---
+
+## Step 10: Export Sample for Spreadsheet Analysis
+Extracted subset of rows for easier analysis.
+
+Command:
+head -n 1000 log.csv > small.csv
+
+Purpose:
+- Create smaller dataset for Excel analysis.
+
+---
+
+# Data Preparation in the Editor
+
+## Dataset Used
+- JSON dataset containing sales records.
+- Each record contains fields such as:
+  - City
+  - Product
+  - Sales
+
+The dataset initially appeared in a compressed and less readable format.
+
+---
+
+## Step 1: Format the JSON File
+Opened the dataset in Visual Studio Code and formatted it.
+
+Steps:
+1. Open file in VS Code.
+2. Press `Ctrl + Shift + P`.
+3. Select **Format Document**.
+
+Purpose:
+- Convert the compact JSON structure into a readable format.
+
+---
+
+## Step 2: Extract Specific Fields
+Extracted the **City** field values.
+
+Steps:
+1. Select the word "city".
+2. Press `Ctrl + F`.
+3. Press `Alt + Enter` to select all matches.
+4. Press `Shift + End` to extend selection.
+5. Copy and paste extracted values into a new window.
+
+Result:
+- All city values extracted into a separate list.
+
+---
+
+## Step 3: Extract Product Field
+Repeated the same process to extract **Product** values.
+
+Purpose:
+- Separate relevant fields for further analysis.
+
+---
+
+## Step 4: Sort Extracted Data
+Used VS Code command palette to sort the extracted city list.
+
+Steps:
+1. Press `Ctrl + Shift + P`.
+2. Select **Sort Lines Ascending**.
+
+Purpose:
+- Organize values alphabetically.
+
+---
+
+## Step 5: Remove Duplicate Values
+Steps:
+1. Open command palette.
+2. Select **Delete Duplicate Lines**.
+
+Result:
+- Obtained unique city values.
+
+---
+
+## Step 6: Standardize Inconsistent Entries
+Observed inconsistent spellings of city names.
+
+Example:
+- Bangalore spelled in multiple ways.
+
+Steps:
+1. Use `Ctrl + F` to search variations.
+2. Press `Alt + Enter` to select all occurrences.
+3. Edit all instances simultaneously using multi-cursor.
+
+Result:
+- Corrected all city name variations to a standard format.
+
+---
+
+## Final Output
+Cleaned dataset with:
+- Proper formatting
+- Extracted fields
+- Sorted values
+- Removed duplicates
+- Standardized city names
+
+---
+
+# Cleaning Data with OpenRefine
+
+## Dataset Used
+- Dataset from the U.S. Department of Justice.
+- Fields included:
+  - Case ID
+  - Trade Name
+  - Legal Name
+  - Street Address
+
+The dataset contained multiple variations of the same entity due to punctuation and formatting differences.
+
+---
+
+## Step 1: Import Dataset
+1. Download and install OpenRefine.
+2. Launch OpenRefine (opens in browser).
+3. Select **Create Project**.
+4. Upload the dataset file.
+5. Click **Next → Create Project**.
+
+Purpose:
+Load the dataset into OpenRefine for cleaning.
+
+---
+
+## Step 2: Identify Inconsistent Entries
+Examined address and entity name columns.
+
+Example problem:
+- "XYZ Limited"
+- "XYZ Ltd"
+
+Both represent the same entity but appear as separate records.
+
+---
+
+## Step 3: Create Text Facet
+Steps:
+1. Click the dropdown arrow on the target column.
+2. Select **Facet → Text Facet**.
+
+Purpose:
+- View frequency distribution of values.
+- Identify repeated or inconsistent entries.
+
+---
+
+## Step 4: Apply Clustering
+Steps:
+1. Click **Cluster** in the facet panel.
+2. OpenRefine suggests groups of similar values.
+
+Example:
+- "9227 Haven Avenue Suite 330"
+- "9227 Haven Avenue Suite 330.,"
+
+These were identified as similar entries.
+
+---
+
+## Step 5: Merge Similar Entries
+Options:
+- Merge clusters manually.
+- Or use **Merge Selected & Re-cluster** to combine all suggested matches.
+
+Purpose:
+Standardize similar entries into one consistent value.
+
+---
+
+## Final Output
+Clean dataset with:
+- Standardized entity names
+- Merged duplicate addresses
+- Improved consistency for aggregation and analysis
+
+---
+
+# Discover Data Profile with Python
+
+## Dataset Used
+- Dataset containing information about the largest cities.
+- Fields include:
+  - Country
+  - City population
+  - Population density
+  - Urban area population
+  - Metropolitan population
+
+The dataset was analyzed using the Pandas Profiling library.
+
+---
+
+## Step 1: Import Required Libraries
+Import pandas and pandas profiling library.
+
+Example:
+import pandas as pd
+from pandas_profiling import ProfileReport
+
+Purpose:
+Load necessary tools for automated dataset analysis.
+
+---
+
+## Step 2: Load the Dataset
+Load the dataset into a pandas DataFrame.
+
+Example:
+df = pd.read_csv("dataset.csv")
+
+Purpose:
+Store dataset in a structured format for analysis.
+
+---
+
+## Step 3: Generate Data Profile Report
+Create a profiling report using a single line of code.
+
+Example:
+profile = ProfileReport(df)
+
+Purpose:
+Automatically analyze the dataset structure and statistics.
+
+---
+
+## Step 4: Export the Report
+Save the report as an HTML file.
+
+Example:
+profile.to_file("report.html")
+
+Purpose:
+Generate a visual report containing dataset insights.
+
+---
+
+## Step 5: Inspect Dataset Insights
+Open the generated report to examine:
+
+- Number of variables
+- Number of observations
+- Missing values
+- Numerical vs categorical variables
+
+Purpose:
+Understand dataset structure before further analysis.
+
+---
+
+## Step 6: Identify Outliers
+Examine extreme values in numerical variables.
+
+Example:
+- City proper population
+- City proper density
+
+Purpose:
+Detect unusual values that may require cleaning.
+
+---
+
+## Step 7: Check Correlations
+Use correlation section in the report to detect highly correlated variables.
+
+Example:
+- Urban area population vs metropolitan population.
+
+Purpose:
+Identify redundant features and relationships between variables.
+
+---
+
+## Final Output
+Automated data profile report that highlights:
+- Data distribution
+- Outliers
+- Missing values
+- Correlations
+
+---
+
+# Analyzing JSON APIs with Python
+
+## Dataset Used
+- JSON API from Homebrew containing package information.
+- Additional JSON APIs for individual packages containing analytics data.
+
+Fields extracted:
+- Package Name
+- Description
+- Installation analytics (30, 90, 365 days)
+
+---
+
+## Step 1: Import Required Libraries
+Imported necessary Python modules.
+
+Example:
+import requests
+import json
+import time
+
+Purpose:
+Enable API requests, JSON processing, and controlled request timing.
+
+---
+
+## Step 2: Fetch Package List from API
+Used the requests library to retrieve JSON data containing all available packages.
+
+Example:
+r = requests.get(API_URL)
+packages_json = r.json()
+
+Purpose:
+Obtain list of packages for further analysis.
+
+---
+
+## Step 3: Inspect JSON Structure
+Formatted JSON output using the json module for readability.
+
+Example:
+json.dumps(packages_json, indent=2)
+
+Purpose:
+Understand structure of returned API data.
+
+---
+
+## Step 4: Generate Package-Specific API URLs
+Constructed URLs dynamically using package names.
+
+Example:
+package_url = f"{base_url}/{package_name}.json"
+
+Purpose:
+Access analytics information for each individual package.
+
+---
+
+## Step 5: Extract Analytics Data
+Parsed nested JSON fields to obtain installation counts.
+
+Fields extracted:
+- Installations (30 days)
+- Installations (90 days)
+- Installations (365 days)
+
+Purpose:
+Collect popularity metrics for packages.
+
+---
+
+## Step 6: Loop Through All Packages
+Used a loop to retrieve analytics for every package.
+
+Purpose:
+Automate data collection for thousands of packages.
+
+---
+
+## Step 7: Store Results
+Saved collected data into a list of dictionaries.
+
+Example structure:
+{
+"name": package_name,
+"description": description,
+"analytics": {
+"30d": installs_30,
+"90d": installs_90,
+"365d": installs_365
+}
+}
+
+Purpose:
+Create structured dataset.
+
+---
+
+## Step 8: Export Data to JSON File
+Saved processed results locally.
+
+Example:
+json.dump(results, file, indent=2)
+
+Purpose:
+Reuse collected data without repeatedly querying the API.
+
+---
+
+## Step 9: Sort Results
+Created a custom sorting function to rank packages by popularity.
+
+Purpose:
+Identify most installed packages.
+
+---
+
+## Final Output
+Structured dataset containing package names, descriptions, and installation statistics sorted by popularity.
+
+---
+
+# Image Manipulation with Pillow (Python)
+
+## Dataset Used
+- Image files (JPEG format).
+- Example images used for manipulation such as resizing and format conversion.
+
+---
+
+## Step 1: Install Pillow Library
+Install the Pillow library using pip.
+
+Example:
+pip install pillow
+
+Purpose:
+Enable image processing capabilities in Python.
+
+---
+
+## Step 2: Import Required Modules
+Import image handling modules.
+
+Example:
+from PIL import Image
+from PIL import ImageFilter
+
+Purpose:
+Access image manipulation functions.
+
+---
+
+## Step 3: Open an Image File
+Create an image object.
+
+Example:
+img = Image.open("image.jpg")
+
+Purpose:
+Load the image into memory for processing.
+
+---
+
+## Step 4: Display Image
+Show the image using Python.
+
+Example:
+img.show()
+
+Purpose:
+Verify correct image loading.
+
+---
+
+## Step 5: Convert Image Format
+Save images in a different format.
+
+Example:
+img.save("image.png")
+
+Purpose:
+Convert image types (JPEG → PNG).
+
+---
+
+## Step 6: Process Multiple Images
+Use loops to process images in a directory.
+
+Example:
+for file in os.listdir():
+    if file.endswith(".jpg"):
+        img = Image.open(file)
+
+Purpose:
+Automate image processing tasks.
+
+---
+
+## Step 7: Resize Images
+Generate thumbnails using the thumbnail method.
+
+Example:
+img.thumbnail((300,300))
+
+Purpose:
+Create smaller images for thumbnails.
+
+---
+
+## Step 8: Save Processed Images
+Save resized images in a new directory.
+
+Example:
+img.save("300/image_300.jpg")
+
+Purpose:
+Store processed outputs separately.
+
+---
+
+## Step 9: Apply Image Transformations
+Examples:
+- Rotate image → img.rotate(90)
+- Convert to grayscale → img.convert("L")
+- Blur image → img.filter(ImageFilter.GaussianBlur)
+
+Purpose:
+Modify images for different visual effects.
+
+---
+
+## Final Output
+Automated script capable of resizing, converting, and modifying large batches of images efficiently.
+
+---
+
+# Media Processing using FFMPEG
+
+## Tool Used
+- FFMPEG (command-line multimedia processing tool)
+
+---
+
+## Step 1: Install FFMPEG
+Download the static version of FFMPEG from the official website.
+
+Purpose:
+Allows execution of multimedia processing commands from the command line.
+
+---
+
+## Step 2: Place Executable File
+Extract the FFMPEG executable from the archive and place it in a known directory.
+
+Optional:
+Add the directory to the system PATH variable for easier access.
+
+---
+
+## Step 3: Open Command Line
+Navigate to the folder containing the media file.
+
+Example:
+Shift + Right Click → Open Command Window Here.
+
+Purpose:
+Run FFMPEG commands in the correct working directory.
+
+---
+
+## Step 4: Basic Media Conversion
+Use the command syntax:
+
+ffmpeg -i input_file output_file
+
+Example:
+ffmpeg -i video.avi video.mp4
+
+Purpose:
+Convert media files between different formats.
+
+---
+
+## Step 5: Adjust Output Quality
+Use quality parameters during conversion.
+
+Examples:
+- AVI quality → -q value
+- MP4 quality → -crf value
+
+Purpose:
+Control file quality and compression.
+
+---
+
+## Step 6: Set Bitrates
+Specify audio or video bitrate.
+
+Example:
+-b:v 1000k (video bitrate)
+
+Purpose:
+Fine control over output file size and quality.
+
+---
+
+## Step 7: Apply Filters
+Use filters for modifying audio or video.
+
+Examples:
+- Volume adjustment
+- Audio channel mapping
+- Cropping video
+- Scaling video
+- Rotating video
+
+Purpose:
+Perform advanced media transformations during conversion.
+
+---
+
+## Final Output
+Media files converted, edited, and optimized using command-line FFMPEG operations.
